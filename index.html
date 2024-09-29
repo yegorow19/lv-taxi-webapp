@@ -10,7 +10,7 @@
     <!-- Подключение файла стилей -->
     <link rel="stylesheet" href="styles.css">
     <!-- Подключение Font Awesome для иконок -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Подключение Telegram WebApp JS -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -24,31 +24,7 @@
 
         <!-- Форма бронирования -->
         <form id="booking-form">
-            <div class="mb-3">
-                <label for="from" class="form-label"><i class="fas fa-map-marker-alt"></i> Откуда:</label>
-                <input type="text" id="from" name="from" class="form-control" placeholder="Введите адрес отправления" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="to" class="form-label"><i class="fas fa-map-marker-alt"></i> Куда:</label>
-                <input type="text" id="to" name="to" class="form-control" placeholder="Введите адрес назначения" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="datetime" class="form-label"><i class="fas fa-calendar-alt"></i> Дата и время:</label>
-                <input type="datetime-local" id="datetime" name="datetime" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="car_type" class="form-label"><i class="fas fa-car"></i> Тип автомобиля:</label>
-                <select id="car_type" name="car_type" class="form-select">
-                    <option value="Эконом">Эконом</option>
-                    <option value="Комфорт">Комфорт</option>
-                    <option value="Бизнес">Бизнес</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Отправить</button>
+            <!-- Поля формы -->
         </form>
     </div>
 
@@ -57,43 +33,55 @@
 
     <!-- Ваш JavaScript код -->
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем приложение на весь экран
-        tg.ready();
+        document.addEventListener('DOMContentLoaded', function() {
+            const tg = window.Telegram ? window.Telegram.WebApp : null;
 
-        document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
+            if (tg) {
+                tg.expand(); // Разворачиваем приложение на весь экран
+                tg.ready();
 
-        document.getElementById('booking-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const from = document.getElementById('from').value.trim();
-            const to = document.getElementById('to').value.trim();
-            const datetime = document.getElementById('datetime').value;
-            const carType = document.getElementById('car_type').value;
+                if (tg.initDataUnsafe.user) {
+                    document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
+                } else {
+                    document.getElementById('username').innerText = 'Гость';
+                }
 
-            if (!from || !to || !datetime) {
-                alert('Пожалуйста, заполните все поля.');
-                return;
+                document.getElementById('booking-form').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const from = document.getElementById('from').value.trim();
+                    const to = document.getElementById('to').value.trim();
+                    const datetime = document.getElementById('datetime').value;
+                    const carType = document.getElementById('car_type').value;
+
+                    if (!from || !to || !datetime) {
+                        alert('Пожалуйста, заполните все поля.');
+                        return;
+                    }
+
+                    const data = {
+                        from: from,
+                        to: to,
+                        datetime: datetime,
+                        car_type: carType
+                    };
+
+                    tg.sendData(JSON.stringify(data));
+
+                    // Отображаем сообщение об успешной отправке
+                    const successMessage = document.createElement('p');
+                    successMessage.innerText = 'Ваш заказ отправлен! Спасибо за использование LVTAXI.';
+                    successMessage.style.color = 'green';
+                    document.body.appendChild(successMessage);
+
+                    // Закрываем приложение через несколько секунд
+                    setTimeout(function() {
+                        tg.close();
+                    }, 3000);
+                });
+            } else {
+                alert('Пожалуйста, откройте это приложение внутри Telegram.');
+                // Вы можете скрыть форму или перенаправить пользователя
             }
-
-            const data = {
-                from: from,
-                to: to,
-                datetime: datetime,
-                car_type: carType
-            };
-
-            tg.sendData(JSON.stringify(data));
-
-            // Отображаем сообщение об успешной отправке
-            const successMessage = document.createElement('p');
-            successMessage.innerText = 'Ваш заказ отправлен! Спасибо за использование LVTAXI.';
-            successMessage.style.color = 'green';
-            document.body.appendChild(successMessage);
-
-            // Закрываем приложение через несколько секунд
-            setTimeout(function() {
-                tg.close();
-            }, 3000);
         });
     </script>
 </body>
