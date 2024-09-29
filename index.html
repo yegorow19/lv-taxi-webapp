@@ -3,39 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>LVTAXI Mini App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Мета-тег для адаптивности -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Подключение файла стилей -->
     <link rel="stylesheet" href="styles.css">
-    <!-- Подключение Font Awesome (если используете иконки) -->
+    <!-- Подключение Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Подключение Telegram WebApp JS -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <!-- Логотип -->
-    <img src="logo.webp" alt="LVTAXI Logo" class="logo">
+    <div class="container">
+        <!-- Логотип -->
+        <img src="images/logo.png" alt="LVTAXI Logo" class="logo mb-3">
 
-    <h1>Добро пожаловать в LVTAXI Mini App!</h1>
-    <p>Ваше имя: <span id="username"></span></p>
+        <h1 class="mb-4">Добро пожаловать в LVTAXI Mini App!</h1>
+        <p class="mb-4">Ваше имя: <span id="username"></span></p>
 
-    <form id="booking-form">
-        <label for="from">Откуда:</label>
-        <input type="text" id="from" name="from" required>
+        <!-- Форма бронирования -->
+        <form id="booking-form">
+            <div class="mb-3">
+                <label for="from" class="form-label"><i class="fas fa-map-marker-alt"></i> Откуда:</label>
+                <input type="text" id="from" name="from" class="form-control" placeholder="Введите адрес отправления" required>
+            </div>
 
-        <label for="to">Куда:</label>
-        <input type="text" id="to" name="to" required>
+            <div class="mb-3">
+                <label for="to" class="form-label"><i class="fas fa-map-marker-alt"></i> Куда:</label>
+                <input type="text" id="to" name="to" class="form-control" placeholder="Введите адрес назначения" required>
+            </div>
 
-        <label for="datetime">Дата и время:</label>
-        <input type="datetime-local" id="datetime" name="datetime" required>
+            <div class="mb-3">
+                <label for="datetime" class="form-label"><i class="fas fa-calendar-alt"></i> Дата и время:</label>
+                <input type="datetime-local" id="datetime" name="datetime" class="form-control" required>
+            </div>
 
-        <label for="car_type">Тип автомобиля:</label>
-        <select id="car_type" name="car_type">
-            <option value="Эконом">Эконом</option>
-            <option value="Комфорт">Комфорт</option>
-            <option value="Бизнес">Бизнес</option>
-        </select>
+            <div class="mb-3">
+                <label for="car_type" class="form-label"><i class="fas fa-car"></i> Тип автомобиля:</label>
+                <select id="car_type" name="car_type" class="form-select">
+                    <option value="Эконом">Эконом</option>
+                    <option value="Комфорт">Комфорт</option>
+                    <option value="Бизнес">Бизнес</option>
+                </select>
+            </div>
 
-        <input type="submit" value="Отправить">
-    </form>
+            <button type="submit" class="btn btn-primary w-100">Отправить</button>
+        </form>
+    </div>
 
+    <!-- Подключение Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Ваш JavaScript код -->
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand(); // Разворачиваем приложение на весь экран
@@ -63,8 +83,17 @@
             };
 
             tg.sendData(JSON.stringify(data));
-            alert('Ваш заказ отправлен! Спасибо за использование LVTAXI.');
-            tg.close();
+
+            // Отображаем сообщение об успешной отправке
+            const successMessage = document.createElement('p');
+            successMessage.innerText = 'Ваш заказ отправлен! Спасибо за использование LVTAXI.';
+            successMessage.style.color = 'green';
+            document.body.appendChild(successMessage);
+
+            // Закрываем приложение через несколько секунд
+            setTimeout(function() {
+                tg.close();
+            }, 3000);
         });
     </script>
 </body>
