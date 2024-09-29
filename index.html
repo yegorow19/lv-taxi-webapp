@@ -1,35 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
+    <meta charset="UTF-8">
     <title>LVTAXI Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключение файла стилей -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Логотип (если есть) -->
+    <!-- <img src="logo.png" alt="LVTAXI Logo" class="logo"> -->
+
     <h1>Добро пожаловать в LVTAXI Mini App!</h1>
     <p>Ваше имя: <span id="username"></span></p>
 
     <form id="booking-form">
-        <label>Откуда:</label><br>
-        <input type="text" id="from" name="from"><br>
-        <label>Куда:</label><br>
-        <input type="text" id="to" name="to"><br><br>
+        <label for="from">Откуда:</label>
+        <input type="text" id="from" name="from" required>
+
+        <label for="to">Куда:</label>
+        <input type="text" id="to" name="to" required>
+
+        <label for="datetime">Дата и время:</label>
+        <input type="datetime-local" id="datetime" name="datetime" required>
+
+        <label for="car_type">Тип автомобиля:</label>
+        <select id="car_type" name="car_type">
+            <option value="Эконом">Эконом</option>
+            <option value="Комфорт">Комфорт</option>
+            <option value="Бизнес">Бизнес</option>
+        </select>
+
         <input type="submit" value="Отправить">
     </form>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Развернуть Web App на весь экран
+        tg.expand(); // Разворачиваем приложение на весь экран
         tg.ready();
 
         document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
 
         document.getElementById('booking-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const from = document.getElementById('from').value;
-            const to = document.getElementById('to').value;
-            const data = {from: from, to: to};
-            tg.sendData(JSON.stringify(data)); // Отправляем данные боту
-            tg.close(); // Закрываем веб-приложение
+            const from = document.getElementById('from').value.trim();
+            const to = document.getElementById('to').value.trim();
+            const datetime = document.getElementById('datetime').value;
+            const carType = document.getElementById('car_type').value;
+
+            if (!from || !to || !datetime) {
+                alert('Пожалуйста, заполните все поля.');
+                return;
+            }
+
+            const data = {
+                from: from,
+                to: to,
+                datetime: datetime,
+                car_type: carType
+            };
+
+            tg.sendData(JSON.stringify(data));
+            alert('Ваш заказ отправлен! Спасибо за использование LVTAXI.');
+            tg.close();
         });
     </script>
 </body>
