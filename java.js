@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             const from = document.getElementById('from').value.trim();
             const to = document.getElementById('to').value.trim();
-            // Если вы используете дополнительные поля, добавьте их здесь
+            // Если вы используете дополнительные поля, раскомментируйте их здесь
             /*
             const datetime = document.getElementById('datetime').value;
             const carType = document.getElementById('car_type').value;
