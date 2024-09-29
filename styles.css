@@ -4,10 +4,13 @@ body {
     background-color: #f2f2f2;
     margin: 0;
     padding-top: 20px;
+    overflow-x: hidden; /* Предотвращает горизонтальную прокрутку */
 }
 
 .logo {
+    width: 100%;
     max-width: 150px;
+    height: auto;
     margin-bottom: 20px;
     display: block;
     margin-left: auto;
@@ -28,10 +31,13 @@ p {
 
 .container {
     max-width: 500px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
+/* Стили формы */
 form {
     display: flex;
     flex-direction: column;
@@ -45,9 +51,11 @@ form {
 
 .form-control,
 .form-select {
+    width: 100%;
     padding: 10px;
     font-size: 16px;
     margin-top: 5px;
+    box-sizing: border-box;
 }
 
 .btn {
@@ -75,10 +83,6 @@ form {
 
 /* Медиа-запросы для мобильных устройств */
 @media (max-width: 600px) {
-    body {
-        padding-top: 10px;
-    }
-
     .logo {
         max-width: 120px;
     }
